@@ -25,7 +25,8 @@ namespace la_mia_pizzeria_crud_mvc.Controllers.API
                 return Ok(pizzas);
             }
         }
-        [HttpGet("{id}")]
+
+        [HttpGet]
         public IActionResult SearchPizzas(string? search)
         {
             if(search == null)
@@ -40,7 +41,7 @@ namespace la_mia_pizzeria_crud_mvc.Controllers.API
             }
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
         public IActionResult SearchPizzaById(int id)
         {
 
