@@ -3,6 +3,7 @@ using la_mia_pizzeria_crud_mvc.Database;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System.Text.Json.Serialization;
 
 namespace la_mia_pizzeria_crud_mvc
 {
@@ -20,6 +21,10 @@ namespace la_mia_pizzeria_crud_mvc
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            // Codice aggiunto per evitare che la chiamata Api, vada il loop
+            // Codice di configurazione per il serializzatore Json
+            // in modo che ignori completamente le dipendenze cicliche di eventuali relazioni N:N o 1:N
+            builder.Services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
             //DEPENDECY INJECTION
             builder.Services.AddScoped<ICustomLogger, CustomFileLogger>();
