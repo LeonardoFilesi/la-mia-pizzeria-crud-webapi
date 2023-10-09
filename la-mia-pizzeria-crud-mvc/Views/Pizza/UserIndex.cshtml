@@ -1,0 +1,145 @@
+﻿
+@{
+    Layout = "_MioLayout";
+    bool isFirstItem = true; // Variabile di stato per tracciare il primo elemento
+}
+
+
+@model List<Pizza>
+
+    <div class="d-flex flex-column" style="background-color: #ffb458; height:100%;">
+        <main>
+            <div class="d-flex container-fluid">
+                <div class="container" style="border-radius: 15px; height: 100%; background-color: #870000; padding: 50px 0 50px 0; justify-content: space-evenly">
+
+                    <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="false" style="height: 500px; margin-bottom:20px">
+                        <div class="carousel-indicators">
+
+                           <!--   QUESTE 3 RIGHE DI CODICE BLOCCAVANO I BOTTONI
+                            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                           --> 
+
+                        </div>
+                        <div class="carousel-inner">
+                            @foreach(Pizza pizza in Model)
+                            {
+                                <div class="carousel-item @(isFirstItem ? "active" : "")">
+                                        <img src="@pizza.Image" class="d-block w-100" alt="..." style="height: 500px;">
+                                        <div class="carousel-caption d-none d-md-block" style="border-radius: 10px; background-color:rgb(16 21 31 / 62%);">
+                                            <h5>Pizza: @pizza.Name</h5>
+                                            <p>@pizza.Category?.Name</p>
+                                            <p>@pizza.Description</p>
+                                        </div>
+                                </div>
+                                isFirstItem = false;
+                            }
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+
+                    <!-- TABELLA -->
+                    <div class="d-flex" style="justify-content: center">
+                        <h2 style="color: white">Menu Pizze assurde di oggi!</h2>
+                    </div>
+
+                    <div class="p-3">
+                        <table class="table" style="color: white">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Nome:</th>
+                                    <th scope="col">Descrizione:</th>
+                                    <th scope="col">Categoria:</th>
+                                    <th scope="col">Ingredienti:</th>
+                                    <th scope="col">Prezzo:</th>
+                                    <th scope="col">Azioni:</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach(Pizza pizza in Model)
+                                {
+                                    <tr>
+                                        <th scope="row">@pizza.Id</th>
+                                        <td>Pizza: @pizza.Name</td>
+                                        <td><p>@pizza.Description</p></td>
+                                        <td><p>@pizza.Category?.Name</p></td>
+                                        <td>
+                                        @if (pizza.Ingredientis != null && pizza.Ingredientis.Count > 0)
+                                            {
+                                                <ul>
+                                                @foreach (Ingredienti ingredienti in pizza.Ingredientis)
+                                                    {
+                                                        <li>@ingredienti.Name</li>
+                                                    }
+                                                </ul>
+                                            }
+                                            else
+                                            {
+                                                <span>Non è stata ancora compilata la lista degli ingredienti</span>
+                                            }
+                                        </td>
+                                        <td>@pizza.Price $</td>
+                                        <td>
+                                            <a class="btn btn-danger" href="@Url.Action("Details", "Pizza", new { id = pizza.Id })" title="pizza details">DETAILS</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- CARTE -->
+                    <div class="d-flex flex-wrap" style="justify-content: space-evenly;">
+                        @foreach(Pizza pizza in Model)
+                        {
+                            <div class="card" style="width: 18rem; margin-bottom:20px;">
+                                <img src="@pizza.Image" class="card-img-top" alt="..." style="height:180px">
+                                <div class="card-body">
+                                    <h5 class="card-title">@pizza.Name</h5>
+                                    <p class="card-text">@pizza.Description</p>
+                                    <p class="card-text">@pizza.Price $</p>
+                                </div>
+                                <div class="card-body">
+                                    <a href="#" class="card-link">Card link</a>
+                                    <a href="#" class="card-link">Another link</a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </main>
+
+    </div>
+
+    <!--SCRIPT CAROSELLO-->
+<script>
+    var carousel = document.getElementById('carouselExampleCaptions');
+    var indicators = carousel.querySelector('.carousel-indicators');
+    var items = carousel.querySelectorAll('.carousel-item');
+
+    items.forEach(function (item, index) {
+        var indicator = document.createElement('button');
+        indicator.setAttribute('type', 'button');
+        indicator.setAttribute('data-bs-target', '#carouselExampleCaptions');
+        indicator.setAttribute('data-bs-slide-to', index.toString());
+        if (index === 0) {
+            indicator.classList.add('active');
+        }
+        indicators.appendChild(indicator);
+
+        item.addEventListener('mouseenter', function () {
+            indicators.querySelector('.active').classList.remove('active');
+            indicator.classList.add('active');
+        });
+    });
+</script>

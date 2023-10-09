@@ -1,0 +1,48 @@
+﻿﻿@{
+    Layout = "_MioLayout";
+}
+@model Pizza
+
+<div class="container detailpizza text-center">
+
+    <div class="title mt-4 w-50"><h1 class="mt-3 mb-3">DETTAGLI DI: @Model.Name</h1></div>
+
+
+    <div class="singleimage mt-4">
+        <img width="500" src="@Model.Image">
+    </div>
+
+    <div class="title text-white w-25 mt-4 mb-4">
+
+        <p>DESCRIZIONE: @Model.Description</p>
+        <p>PRIEZZO: @Model.Price $</p>
+        <p>CATEGORIA:
+            @if (Model.Category != null)
+            {
+                 <p>@Model.Category.Name</p>
+            }
+            else
+            {
+                <span>Non è stata ancora selezionata una categoria</span>
+            }
+
+        <p>
+            <sp>INGREDIENTI:</sp>
+            @if (Model.Ingredientis != null && Model.Ingredientis.Count > 0)
+            {
+                <ul>
+                    @foreach (Ingredienti ingredienti in Model.Ingredientis)
+                    {
+                        <li>@ingredienti.Name</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <span>Non è stata ancora compilata la lista degli ingredienti</span>
+            }
+        </p>
+
+    </div>
+
+</div>

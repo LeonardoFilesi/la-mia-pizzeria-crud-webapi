@@ -1,0 +1,61 @@
+﻿﻿@{
+    Layout = "_MioLayout";
+}
+@model PizzaFormModel
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1>Crea una nuova Pizza da aggiungere</h1>
+        </div>
+        <form asp-controller="Pizza" asp-action="Create" method="post">
+            @Html.AntiForgeryToken()         <!--DA METTERE SEMPRE PER LA SICUREZZA DEL CODICE-->
+            <!--NOME-->
+            <div class="mb-3">
+                <strong>Nome:</strong>
+                <input type="text" class="form-control" asp-for="Pizza.Name">
+                <span asp-validation-for="Pizza.Name" class="text-danger"></span>
+            </div>
+            <!--DESCRIZIONE-->
+            <div class="mb-3">
+                <strong>Descrizione:</strong>
+                <input type="text" class="form-control" asp-for="Pizza.Description">
+                <span asp-validation-for="Pizza.Description" class="text-danger"></span>
+            </div>
+            <!--CATEGORIA-->
+            <div class="mb-3">
+                <strong>Categoria:</strong>
+                <select asp-for="Pizza.CategoryId" rows="10" class="d-block w-100">
+                    <option value="">Seleziona la categoria...</option>
+                    @foreach (Category category in Model.Categories)
+                    {
+                        <option value="@category.Id">@category.Name</option>
+                    }
+                </select>
+            </div>
+            <!-- SELECT MULTIPLA PER GLI INGREDIENTI -->
+            <div class="mb-3">
+                <strong>Seleziona Tags:</strong>
+                <select asp-for="SelectedIngredientiId"
+                        multiple="multiple"
+                        size="10"
+                        class="form-control mb-2 mr-sm-2 ml-sm-3 leftList"
+                        asp-items="@Model.Ingredienti">
+                </select>
+            </div>
+            <!--PREZZO-->
+            <div class="mb-3">
+                <strong>Prezzo:</strong>
+                <input type="number" class="form-control" asp-for="Pizza.Price" min="0">
+                <span asp-validation-for="Pizza.Image" class="text-danger"></span>
+            </div>
+            <!--IMMAGINE-->
+            <div class="mb-3">
+                <strong>URL Immagine:</strong>
+                <input type="text" class="form-control" asp-for="Pizza.Image">
+                <span asp-validation-for="Pizza.Image" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Aggiungi nuova Pizza</button>
+        </form>
+    </div>
+</div>
