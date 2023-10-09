@@ -17,9 +17,9 @@ namespace la_mia_pizzeria_crud_mvc.Controllers.API
         }
 
         [HttpGet]
-        public IActionResult GetPizzas() 
-        { 
-            using(PizzaContext db = new PizzaContext())
+        public IActionResult GetPizzas()
+        {
+            using (PizzaContext db = new PizzaContext())
             {
                 List<Pizza> pizzas = db.Pizzas.Include(pizza => pizza.Ingredientis).ToList();
                 return Ok(pizzas);
@@ -29,12 +29,12 @@ namespace la_mia_pizzeria_crud_mvc.Controllers.API
         [HttpGet]
         public IActionResult SearchPizzas(string? search)
         {
-            if(search == null)
+            if (search == null)
             {
-                return BadRequest(new {Message = "Non hai inserito una stringa di ricerca"});
+                return BadRequest(new { Message = "Non hai inserito una stringa di ricerca" });
             }
-            
-            using(PizzaContext db = new PizzaContext())
+
+            using (PizzaContext db = new PizzaContext())
             {
                 List<Pizza> foundedPizzas = db.Pizzas.Where(pizza => pizza.Name.ToLower().Contains(search.ToLower())).ToList();
                 return Ok(foundedPizzas);
@@ -48,7 +48,7 @@ namespace la_mia_pizzeria_crud_mvc.Controllers.API
             using (PizzaContext db = new PizzaContext())
             {
                 Pizza? pizza = db.Pizzas.Where(pizza => pizza.Id == id).FirstOrDefault();
-                
+
                 if (id != null)
                 {
                     return Ok(pizza);
@@ -60,7 +60,7 @@ namespace la_mia_pizzeria_crud_mvc.Controllers.API
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody]Pizza newPizza)
+        public IActionResult Create([FromBody] Pizza newPizza)
         {
             try
             {
@@ -74,6 +74,43 @@ namespace la_mia_pizzeria_crud_mvc.Controllers.API
 
         }
 
+        [HttpPut("{id}")]
+        public IActionResult ModifyPizza(int id, [FromBody] Pizza updatedPizza)
+        {
+            Pizza? pizzaToUpdate = _myDB.Pizzas.Where(pizza => pizza.Id == id).FirstOrDefault();
+
+            if (pizzaToUpdate != null)
+            {
+                return NotFound();
+            } else
+            {
+                pizzaToUpdate.Name = updatedPizza.Name;
+                pizzaToUpdate.Description = updatedPizza.Description;
+                pizzaToUpdate.Image = updatedPizza.Image;
+                pizzaToUpdate.Category = updatedPizza.Category;
+                pizzaToUpdate.Ingredientis = updatedPizza.Ingredientis;
+                pizzaToUpdate.Price = updatedPizza.Price;
+
+                return Ok();
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            Pizza? pizzaToDelete = _myDB.Pizzas.Where(pizza => pizza.Id == id).FirstOrDefault();
+
+            if (pizzaToDelete != null)
+            {
+                return NotFound();
+            } else
+            {
+                _myDB.Pizzas.Remove(pizzaToDelete);
+                _myDB.SaveChanges();
+
+                return Ok();
+            }
+        }
             
     }
 }
