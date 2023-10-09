@@ -26,6 +26,7 @@ namespace la_mia_pizzeria_crud_mvc.Controllers.API
             }
         }
 
+        //===================================SEARCHBYNAME========================================
         [HttpGet]
         public IActionResult SearchPizzas(string? search)
         {
@@ -41,6 +42,7 @@ namespace la_mia_pizzeria_crud_mvc.Controllers.API
             }
         }
 
+        //===================================SEARCHBYID=====================================
         [HttpGet("{id}")]
         public IActionResult SearchPizzaById(int id)
         {
@@ -58,7 +60,6 @@ namespace la_mia_pizzeria_crud_mvc.Controllers.API
                 }
             }
         }
-
         [HttpPost]
         public IActionResult Create([FromBody] Pizza newPizza)
         {
@@ -74,6 +75,7 @@ namespace la_mia_pizzeria_crud_mvc.Controllers.API
 
         }
 
+        //====================================UPDATE==========================================
         [HttpPut("{id}")]
         public IActionResult ModifyPizza(int id, [FromBody] Pizza updatedPizza)
         {
@@ -95,6 +97,7 @@ namespace la_mia_pizzeria_crud_mvc.Controllers.API
             }
         }
 
+        //=====================================DELETE=========================================
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
