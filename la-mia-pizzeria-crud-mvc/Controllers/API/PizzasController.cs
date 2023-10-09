@@ -10,6 +10,12 @@ namespace la_mia_pizzeria_crud_mvc.Controllers.API
     [ApiController]
     public class PizzasController : ControllerBase
     {
+        private PizzaContext _myDB;
+        public PizzasController(PizzaContext myDB)
+        {
+            _myDB = myDB;
+        }
+
         [HttpGet]
         public IActionResult GetPizzas() 
         { 
@@ -19,7 +25,7 @@ namespace la_mia_pizzeria_crud_mvc.Controllers.API
                 return Ok(pizzas);
             }
         }
-        [HttpGet]
+        [HttpGet("{id}")]
         public IActionResult SearchPizzas(string? search)
         {
             if(search == null)
@@ -33,5 +39,40 @@ namespace la_mia_pizzeria_crud_mvc.Controllers.API
                 return Ok(foundedPizzas);
             }
         }
+
+        [HttpGet]
+        public IActionResult SearchPizzaById(int id)
+        {
+
+            using (PizzaContext db = new PizzaContext())
+            {
+                Pizza? pizza = db.Pizzas.Where(pizza => pizza.Id == id).FirstOrDefault();
+                
+                if (id != null)
+                {
+                    return Ok(pizza);
+                } else
+                {
+                    return NotFound();
+                }
+            }
+        }
+
+        [HttpPost]
+        public IActionResult Create([FromBody]Pizza newPizza)
+        {
+            try
+            {
+                _myDB.Pizzas.Add(newPizza);
+                _myDB.SaveChanges();
+                return Ok();
+            } catch (Exception ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+
+        }
+
+            
     }
 }
