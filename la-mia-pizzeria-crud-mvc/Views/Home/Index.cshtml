@@ -4,3 +4,95 @@
 }
 
 
+<div class="container">
+
+    <div class="row">
+        <div class="col-12">
+            <h1>Lista delle pizze</h1>
+            <div>
+                <input id="js_search_box" type="text" class="form-control my-3" placeholder="Cerca per titolo...">
+            </div>
+        </div>
+    </div>
+
+    <div id="loading-spinner" class="row">
+        <div class="col-12">
+            <div class="spinner-border" role="status"></div>
+        <span class="visually-hidden">Sto cercando gli articoli disponibili... </span>
+        </div>
+    </div>
+
+    <div id="row-no-pizzas" class="row d-none">
+        <div class="col-12">
+            <h1>Nessuna Pizza trovata</h1>
+        </div>
+    </div>
+
+
+
+    <div id="list-of-pizzas" class="row d-none">
+        <div class="col-12">
+
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        
+        loadAllPizza();
+
+        document.getElementById("js_search_box").addEventListener('keyup', searchPizzas);
+
+        function searchPizzas() 
+        {
+            let searchString = document.getElementById("js_search_box").value;
+
+            loadPizzas(searchString);
+        }
+
+        function loadAllPizzas() 
+        {
+            axios.get('/api/Pizzas/SearchPizzas', { params: {search: searchParam}}).then((res)=>
+            {
+                console.log(res);
+
+                var divNoPizzas = document.getElementById("div-no-pizzas");
+                var loadingSpinnerElement = document.getElementById("loading-spinner");
+                var listOfPizzasElement = document.getElementById("list-of-pizzas");
+
+                if(res.data.length == 0) 
+                {
+                    divNoPizzas.classList.Remove("d-none");
+                    loadingSpinnerElement.classList.Add("d-none");
+                } 
+                else 
+                {
+                    loadingSpinnerElement.classList.add("d-none");
+                    listOfPizzasElement.classList.remove("d-none");
+
+                    listOfPizzasElement.innerHTML = "";
+
+                    res.data.forEach(article => 
+                    {
+                            console.log("pizza");
+
+                            listOfPizzasElement.innerHTML +=
+                                `
+                                <div class="col-12 col-md-4 p-2">
+                                        <div class="card post h-100">
+                                            <img src="${pizza.image}" class="card-img-top" alt="Immagine ${pizza.name}">
+                                            <div class="card-body">
+                                                <h5 class="card-title">${pizza.name}</h5>
+                                                <p class="card-text">${pizza.description}</p>
+                                            </div>
+                                        </div>
+                                </div>
+                                `
+                    })
+                }
+            })
+        }
+    </script>
+}

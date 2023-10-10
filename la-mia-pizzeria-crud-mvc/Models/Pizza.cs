@@ -26,6 +26,10 @@ namespace la_mia_pizzeria_crud_mvc.Models
         [Url(ErrorMessage ="Devi inserire un link valido per l'immagine della Pizza")] // AGGIUNTA per la VALIDAZIONE
         [MaxLength(500, ErrorMessage ="Il link non può essere più lungo di 500 caratteri")] // AGGIUNTA per la VALIDAZIONE
         public string Image {  get; set; }
+        public string ImageUrl { get; set; }
+        public byte[]? ImageFile { get; set; }
+
+        public string ImageSrc => ImageFile is null ? (ImageUrl is null ? "" : ImageUrl) : $"data:image/png;base64,{Convert.ToBase64String(ImageFile)}";
 
 
         // AGGIUNGERE CategoryId e la relazione con 1 a N CATEGORY
