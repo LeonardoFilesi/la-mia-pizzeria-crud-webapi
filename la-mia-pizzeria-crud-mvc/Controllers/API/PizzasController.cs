@@ -32,7 +32,8 @@ namespace la_mia_pizzeria_crud_mvc.Controllers.API
         {
             if (search == null)
             {
-                return BadRequest(new { Message = "Non hai inserito una stringa di ricerca" });
+                // return BadRequest(new { Message = "Non hai inserito una stringa di ricerca" });
+                return GetPizzas();
             }
 
             using (PizzaContext db = new PizzaContext())

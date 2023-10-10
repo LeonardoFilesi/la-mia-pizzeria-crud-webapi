@@ -52,7 +52,7 @@ namespace la_mia_pizzeria_crud_mvc
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Pizza}/{action=Index}/{id?}");
+                pattern: "{controller=Pizza}/{action=UserIndex}/{id?}");
 
             app.MapRazorPages();
 

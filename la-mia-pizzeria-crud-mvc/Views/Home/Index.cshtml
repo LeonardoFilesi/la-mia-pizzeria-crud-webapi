@@ -39,6 +39,7 @@
 </div>
 
 @section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js" integrity="sha512-emSwuKiMyYedRwflbZB2ghzX8Cw8fmNVgZ6yQNNXXagFzFOaQmbvQ1vmDkddHjm5AITcBIZfC7k4ShQSjgPAmQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script type="text/javascript">
         
         loadAllPizza();
@@ -49,11 +50,11 @@
         {
             let searchString = document.getElementById("js_search_box").value;
 
-            loadPizzas(searchString);
+            loadAllPizza(searchString);
         }
 
-        function loadAllPizzas() 
-        {
+
+        function loadAllPizza(searchParam) {
             axios.get('/api/Pizzas/SearchPizzas', { params: {search: searchParam}}).then((res)=>
             {
                 console.log(res);
@@ -74,25 +75,37 @@
 
                     listOfPizzasElement.innerHTML = "";
 
-                    res.data.forEach(article => 
-                    {
-                            console.log("pizza");
+                    res.data.forEach(pizza => {
+                        console.log("pizza");
 
-                            listOfPizzasElement.innerHTML +=
-                                `
-                                <div class="col-12 col-md-4 p-2">
-                                        <div class="card post h-100">
-                                            <img src="${pizza.image}" class="card-img-top" alt="Immagine ${pizza.name}">
-                                            <div class="card-body">
-                                                <h5 class="card-title">${pizza.name}</h5>
-                                                <p class="card-text">${pizza.description}</p>
-                                            </div>
-                                        </div>
-                                </div>
-                                `
-                    })
+                        listOfPizzasElement.innerHTML +=
+                            `
+                                  <div class="col-12 col-md-4 p-2" id="${pizza.id}">
+                                      <div class="card text-center ">
+                                             <img src="${pizza.image}" class="card-img-top" alt="Immagine ${pizza.id}">
+                                             <div id="card_` + pizza.id + `" class="card-body">
+                                                   <h5 class="card-title">${pizza.name}</h5>
+                                                   <p class="card-text">${pizza.description}</p>
+                                                   <p class="card-text">${pizza.category == null? '' : pizza.category.name}</p>
+                                                   <p class="card-text">${pizza.price} $</p>
+                                             </div>
+                                       </div>
+                                  </div>
+                            `;
+                        const btn = document.createElement("button");
+                        btn.type = "button";
+                        btn.classList.add("btn", "btn-danger");
+                        btn.innerHTML = "Delete";
+                        btn.setAttribute("data-pizza-id", pizza.id);
+                        btn.setAttribute("id", pizza.id);
+                        btn.onclick = function () { deletePizza(pizza.id); };
+                        document.getElementById("card_" + pizza.id).appendChild(btn);
+                    });
                 }
             })
         }
+
+
     </script>
+
 }
